@@ -508,3 +508,84 @@ body {
   .footer-inner { flex-direction: column; gap: 16px; }
   .footer-meta { text-align: left; }
 }
+
+
+
+/* --- 반응형 레이아웃 핵심 --- */
+
+/* 1. 태블릿 및 작은 화면 (1024px 이하) */
+@media (max-width: 1024px) {
+  :root {
+    --sidebar-width: 200px; /* 사이드바 폭을 줄임 */
+  }
+  
+  .hero-h1 {
+    font-size: 3rem; /* 제목 크기 축소 */
+  }
+}
+
+/* 2. 모바일 (768px 이하) */
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 0px; /* 사이드바를 화면에서 숨김 */
+  }
+
+  /* 사이드바를 상단 바 또는 슬라이드 메뉴로 변경 */
+  .sidebar {
+    width: 100%;
+    height: 60px;
+    flex-direction: row;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo {
+    margin-bottom: 0;
+  }
+
+  .sidebar-menu {
+    display: none; /* 모바일에서는 기본 메뉴 숨김 (필요시 햄버거 메뉴 구현) */
+  }
+
+  /* 메인 콘텐츠 영역 확장 */
+  .main-content {
+    margin-left: 0;
+    padding-top: 70px; /* 상단 고정 바 높이만큼 여백 */
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  /* 표(Schedule) 반응형 처리: 가로 스크롤 허용 */
+  .schedule-table-wrap {
+    overflow-x: auto;
+  }
+
+  /* 카드형 레이아웃 1열로 변경 */
+  .news-grid, .board-list {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-h1 {
+    font-size: 2.2rem;
+  }
+  
+  .hero-content {
+    padding: 20px;
+  }
+}
+
+/* 3. 초소형 기기 (480px 이하) */
+@media (max-width: 480px) {
+  .section-h2 {
+    font-size: 1.5rem;
+  }
+  
+  .btn-primary {
+    width: 100%; /* 버튼을 가로 꽉 차게 */
+  }
+}
