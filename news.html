@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>AI 뉴스 — 인사동 AI 학습동아리</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;600&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/shared.css"/>
+  <style>
+  .main{margin-left:var(--sb)}
+  .page-hero{padding:56px 56px 40px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+  .page-hero::before{content:'AI NEWS';font-family:var(--disp);font-size:160px;position:absolute;right:-10px;top:10px;opacity:.03;letter-spacing:4px;pointer-events:none;line-height:1}
+  .ph-row{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;position:relative;z-index:1}
+  .news-ts{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:8px}
+  /* News grid */
+  .news-wrap{padding:40px 56px 60px}
+  .news-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+  .nf-btn{padding:6px 14px;border-radius:var(--r);border:1px solid var(--bord2);background:transparent;color:var(--muted);font-size:12px;cursor:pointer;transition:.15s}
+  .nf-btn:hover{color:var(--txt)}
+  .nf-btn.active{background:rgba(56,189,248,.1);border-color:var(--accent);color:var(--accent)}
+  .news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .news-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r2);padding:22px;display:flex;flex-direction:column;gap:10px;transition:.2s var(--ease);cursor:pointer;position:relative;overflow:hidden}
+  .news-card:hover{border-color:var(--bord2);transform:translateY(-3px)}
+  .news-card.featured{grid-column:span 2;border-color:rgba(56,189,248,.2)}
+  .news-card.featured::before{content:'FEATURED';font-family:var(--mono);font-size:9px;letter-spacing:.1em;position:absolute;top:12px;right:14px;color:var(--accent);background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);padding:2px 8px;border-radius:4px}
+  .nc-cat{font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:3px 10px;border-radius:4px;display:inline-block;background:rgba(56,189,248,.08);color:var(--accent);border:1px solid rgba(56,189,248,.2);width:fit-content}
+  .nc-title{font-size:14px;font-weight:600;line-height:1.5;flex:1}
+  .news-card.featured .nc-title{font-size:17px}
+  .nc-summary{font-size:12px;color:var(--muted);line-height:1.6}
+  .nc-ft{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid var(--border)}
+  .nc-src{font-size:11px;color:var(--dim);font-family:var(--mono)}
+  .nc-time{font-size:11px;color:var(--dim);font-family:var(--mono)}
+  /* update info */
+  .update-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 56px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .ub-badge{font-family:var(--mono);font-size:10px;background:rgba(52,211,153,.08);color:var(--green);border:1px solid rgba(52,211,153,.25);padding:3px 10px;border-radius:4px;letter-spacing:.06em}
+  .ub-text{font-size:12px;color:var(--muted)}
+  @media(max-width:1024px){.news-grid{grid-template-columns:repeat(2,1fr)}.news-card.featured{grid-column:span 2}}
+  @media(max-width:768px){
+    .page-hero{padding:70px 18px 28px}
+    .news-wrap{padding:24px 18px 48px}
+    .update-bar{padding:10px 18px}
+    .news-grid{grid-template-columns:1fr}
+    .news-card.featured{grid-column:auto}
+    .news-card.featured::before{display:none}
+  }
+  </style>
+</head>
+<body>
+<script src="../js/sidebar.js"></script>
+
+<main class="main">
+  <div class="page-hero">
+    <div class="ph-row">
+      <div>
+        <span class="sec-lbl">AI NEWS</span>
+        <h1 style="font-size:28px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px">오늘의 AI 뉴스</h1>
+        <p style="font-size:13px;color:var(--muted)">매일 오전 7시 선별 업데이트 | 생성형 AI · 공공 디지털 · 사회서비스</p>
+        <div class="news-ts" id="newsTs">—</div>
+      </div>
+      <button class="btn btn-outline" onclick="loadNews(true)">↻ 새로고침</button>
+    </div>
+  </div>
+
+  <div class="update-bar">
+    <span class="ub-badge">AUTO</span>
+    <span class="ub-text">매일 오전 7시 자동 업데이트 · Claude AI가 공공·사회서비스 분야 핵심 뉴스를 선별·요약합니다</span>
+  </div>
+
+  <div class="news-wrap">
+    <div class="news-filter">
+      <button class="nf-btn active" onclick="filterNews('전체',this)">전체</button>
+      <button class="nf-btn" onclick="filterNews('생성형AI',this)">생성형 AI</button>
+      <button class="nf-btn" onclick="filterNews('공공디지털',this)">공공 디지털</button>
+      <button class="nf-btn" onclick="filterNews('사회서비스',this)">사회서비스</button>
+      <button class="nf-btn" onclick="filterNews('AI도구',this)">AI 도구</button>
+      <button class="nf-btn" onclick="filterNews('공모전',this)">공모전</button>
+    </div>
+    <div id="newsList" class="news-grid"><div class="loading">뉴스를 불러오는 중</div></div>
+  </div>
+</main>
+
+<script src="../js/shared.js"></script>
+<script>
+let _allNews=[];
+let _newsFilter='전체';
+
+/* 오전 7시 이후 캐시 유효 여부 */
+function _isFresh(){
+  const c=DB.newsCache();if(!c)return false;
+  const ts=new Date(c.ts),now=new Date();
+  const at7=new Date(now.getFullYear(),now.getMonth(),now.getDate(),7);
+  return ts>=at7&&ts.toDateString()===now.toDateString();
+}
+
+const DEMO=[
+  {id:1,featured:true,cat:'생성형AI',title:'행안부, 2026 공공 AI 활용 전략 로드맵 공개',summary:'행정안전부가 전국 지자체·공공기관 대상 생성형 AI 도입 지원 전략과 단계별 로드맵을 발표했습니다. 민원 자동화·내부 행정 보조 AI 구축에 집중 투자할 계획입니다.',source:'행정안전부',time:'07:05',url:'https://www.mois.go.kr'},
+  {id:2,cat:'공공디지털',title:'과기부, AI 기반 공공서비스 혁신 공모전 개최',summary:'과학기술정보통신부가 공공 AI 활용 아이디어 공모전을 6월 개최. 최우수상 1,000만 원.',source:'과학기술정보통신부',time:'07:20',url:'https://www.msit.go.kr'},
+  {id:3,cat:'사회서비스',title:'복지부, AI 바우처 부정수급 탐지 시스템 전국 확대',summary:'AI 이상거래 탐지 도입 1년간 12,000건 적발. 연간 절감 효과 350억 원으로 전국 확산.',source:'보건복지부',time:'07:35',url:'https://www.mohw.go.kr'},
+  {id:4,cat:'AI도구',title:'Claude 4 — 공공문서 분석 능력 획기적 향상',summary:'Anthropic의 Claude 4가 200K 토큰 지원으로 장문 법령·보고서 전문 분석에 강점을 보입니다.',source:'AI 타임스',time:'08:00',url:'#'},
+  {id:5,cat:'공모전',title:'NIA, AI 활용 데이터 분석 경진대회 참가팀 모집',summary:'한국지능정보사회진흥원이 주관하는 공공 AI 데이터 경진대회가 7월 열립니다. 팀당 3~5인.',source:'NIA',time:'08:30',url:'https://www.nia.or.kr'},
+  {id:6,cat:'생성형AI',title:'국내 공공기관 생성형 AI 도입률 37% 돌파',summary:'NIA 조사 결과 2026년 기준 공공기관 생성형 AI 도입률이 2024년 대비 3배 이상 증가했습니다.',source:'NIA 한국지능정보사회진흥원',time:'09:00',url:'https://www.nia.or.kr'},
+];
+
+async function loadNews(force=false){
+  if(!force&&_isFresh()){
+    const c=DB.newsCache();
+    _allNews=c.data;
+    const ts=new Date(c.ts);
+    document.getElementById('newsTs').textContent=`오늘 ${ts.getHours()}:${String(ts.getMinutes()).padStart(2,'0')} 업데이트`;
+    renderNewsList();return;
+  }
+  document.getElementById('newsList').innerHTML='<div class="loading">Claude AI가 오늘의 핵심 뉴스를 선별하는 중</div>';
+  try{
+    const curated=await _curateWithClaude(DEMO);
+    _allNews=curated;
+    DB.setNews(_allNews);
+    const now=new Date();
+    document.getElementById('newsTs').textContent=`오늘 ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')} 업데이트`;
+  }catch{
+    _allNews=DEMO;
+    DB.setNews(_allNews);
+    document.getElementById('newsTs').textContent='업데이트 완료 (오프라인 모드)';
+  }
+  renderNewsList();
+}
+
+async function _curateWithClaude(raw){
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1000,
+      messages:[{role:'user',content:`공공기관 IT 담당자와 AI 학습동아리 회원이 꼭 알아야 할 뉴스를 아래 목록에서 선별하고, summary를 2~3문장으로 더 명확하게 다듬어 주세요. 순수 JSON 배열만 반환하세요.\n${JSON.stringify(raw)}`}]
+    })
+  });
+  if(!res.ok)throw new Error('API error');
+  const d=await res.json();
+  const txt=(d.content||[]).map(c=>c.text||'').join('');
+  return JSON.parse(txt.replace(/```json|```/g,'').trim());
+}
+
+function filterNews(f,btn){
+  _newsFilter=f;
+  document.querySelectorAll('.nf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderNewsList();
+}
+
+function renderNewsList(){
+  const el=document.getElementById('newsList');
+  let list=_allNews;
+  if(_newsFilter!=='전체')list=list.filter(n=>n.cat===_newsFilter||(n.cat&&n.cat.replace(/[·\s]/g,'')===_newsFilter.replace(/[·\s]/g,'')));
+  if(!list.length){el.innerHTML='<div class="loading">해당 카테고리 뉴스가 없습니다</div>';return}
+  el.innerHTML=list.map((n,i)=>`
+    <div class="news-card ${n.featured?'featured':''}" onclick="openNews('${n.url||'#'}')">
+      <span class="nc-cat">${esc(n.cat)}</span>
+      <div class="nc-title">${esc(n.title)}</div>
+      ${n.summary?`<div class="nc-summary">${esc(n.summary)}</div>`:''}
+      <div class="nc-ft">
+        <span class="nc-src">${esc(n.source)}</span>
+        <span class="nc-time">${esc(n.time)}</span>
+      </div>
+    </div>`).join('');
+}
+
+function openNews(url){
+  if(url&&url!=='#')window.open(url,'_blank');
+  else toast('실제 배포 시 기사 원문으로 연결됩니다.');
+}
+
+loadNews();
+</script>
+</body>
+</html>

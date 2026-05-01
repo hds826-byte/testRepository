@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>운영 일정 — 인사동 AI 학습동아리</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;600&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/shared.css"/>
+  <style>
+  .main{margin-left:var(--sb)}
+  .page-hero{padding:56px 56px 40px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+  .page-hero::before{content:'SCHEDULE';font-family:var(--disp);font-size:200px;position:absolute;right:-20px;top:-20px;opacity:.03;letter-spacing:4px;pointer-events:none;line-height:1}
+  .ph-inner{position:relative;z-index:1}
+  .month-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+  .mf-btn{padding:6px 14px;border-radius:var(--r);border:1px solid var(--bord2);background:transparent;color:var(--muted);font-size:12px;cursor:pointer;transition:.15s;font-family:var(--mono)}
+  .mf-btn:hover{color:var(--txt)}
+  .mf-btn.active{background:rgba(56,189,248,.1);border-color:var(--accent);color:var(--accent)}
+  /* Timeline */
+  .timeline{padding:0 56px 60px;display:flex;flex-direction:column;gap:0}
+  .month-group{margin-bottom:40px}
+  .mg-hd{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+  .mg-month{font-family:var(--disp);font-size:36px;letter-spacing:.04em;color:var(--accent);opacity:.7}
+  .mg-bar{flex:1;height:1px;background:var(--border)}
+  .sessions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .sc-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r2);padding:22px;transition:.2s var(--ease);position:relative;overflow:hidden}
+  .sc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--acc2));opacity:0;transition:.2s}
+  .sc-card:hover{border-color:var(--bord2);transform:translateY(-2px)}
+  .sc-card:hover::before{opacity:1}
+  .sc-card.past{opacity:.45}
+  .sc-card.today{border-color:var(--accent)}
+  .sc-card.today::before{opacity:1}
+  .sc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;flex-wrap:wrap}
+  .sc-session{font-family:var(--mono);font-size:10px;background:rgba(56,189,248,.1);color:var(--accent);border:1px solid rgba(56,189,248,.2);padding:2px 8px;border-radius:4px;flex-shrink:0}
+  .sc-date{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .sc-title{font-size:15px;font-weight:600;margin-bottom:8px;line-height:1.4}
+  .sc-sub{font-size:12px;color:var(--muted);line-height:1.6}
+  .today-badge{position:absolute;top:14px;right:14px;font-size:9px;background:var(--accent);color:#000;border-radius:4px;padding:2px 7px;font-family:var(--mono);font-weight:600}
+  /* Progress bar */
+  .progress-bar-wrap{padding:0 56px 20px}
+  .pb-info{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px;font-family:var(--mono)}
+  .pb-track{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+  .pb-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--acc2));border-radius:3px;transition:width .6s var(--ease)}
+  @media(max-width:1024px){.sessions{grid-template-columns:1fr}}
+  @media(max-width:768px){
+    .page-hero{padding:70px 18px 32px}
+    .timeline{padding:0 18px 48px}
+    .progress-bar-wrap{padding:0 18px 16px}
+  }
+  </style>
+</head>
+<body>
+<script src="../js/sidebar.js"></script>
+
+<main class="main">
+  <div class="page-hero">
+    <div class="ph-inner">
+      <span class="sec-lbl">SCHEDULE</span>
+      <h1 style="font-size:28px;font-weight:700;letter-spacing:-.02em;margin-bottom:10px">2026 세부 운영 일정</h1>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:24px">5월 ~ 12월 | 격주 모임 총 16회차 | 생성형 AI 실전 활용 주제</p>
+      <div class="month-filter" id="monthFilter">
+        <button class="mf-btn active" onclick="filterMonth('all',this)">전체</button>
+        <button class="mf-btn" onclick="filterMonth('MAY',this)">MAY</button>
+        <button class="mf-btn" onclick="filterMonth('JUN',this)">JUN</button>
+        <button class="mf-btn" onclick="filterMonth('JUL',this)">JUL</button>
+        <button class="mf-btn" onclick="filterMonth('AUG',this)">AUG</button>
+        <button class="mf-btn" onclick="filterMonth('SEP',this)">SEP</button>
+        <button class="mf-btn" onclick="filterMonth('OCT',this)">OCT</button>
+        <button class="mf-btn" onclick="filterMonth('NOV',this)">NOV</button>
+        <button class="mf-btn" onclick="filterMonth('DEC',this)">DEC</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-bar-wrap" id="progressWrap"></div>
+
+  <div class="timeline" id="timeline"></div>
+</main>
+
+<script src="../js/shared.js"></script>
+<script>
+const SESSIONS=[
+  {date:'2026-05-08',month:'MAY',monthKo:'5월',n:1,title:'킥오프 & AI 도구 대탐험',sub:'ChatGPT·Claude·Gemini 기능 비교 및 업무 적용 가능성 탐색. 각자 가장 쓰고 싶은 AI 툴 발표'},
+  {date:'2026-05-22',month:'MAY',monthKo:'5월',n:2,title:'프롬프트 엔지니어링 실습',sub:'업무 보고서·공문·기획서를 AI로 초안 작성하는 프롬프트 패턴 학습 및 실습'},
+  {date:'2026-06-05',month:'JUN',monthKo:'6월',n:3,title:'AI로 데이터 분석하기',sub:'Excel 대신 ChatGPT·Claude로 통계·차트·인사이트 추출. 사회서비스 데이터 샘플 실습'},
+  {date:'2026-06-19',month:'JUN',monthKo:'6월',n:4,title:'AI 이미지·영상 제작 실습',sub:'Midjourney·DALL-E 활용 홍보물·카드뉴스 제작. AI 영상 편집 도구 비교 체험'},
+  {date:'2026-07-03',month:'JUL',monthKo:'7월',n:5,title:'업무 자동화 — n8n·Zapier',sub:'반복 업무(이메일 분류·보고서 자동생성)를 AI 워크플로우로 자동화하는 노코드 실습'},
+  {date:'2026-07-17',month:'JUL',monthKo:'7월',n:6,title:'AI 챗봇 만들기 (노코드)',sub:'부서 내부용 FAQ 챗봇을 노코드 도구(Dify·Flowise)로 직접 구축해보는 실습'},
+  {date:'2026-08-07',month:'AUG',monthKo:'8월',n:7,title:'생성형 AI로 기획서 작성',sub:'사회서비스 개선 기획서를 AI와 공동 작성. 구조·논리·데이터 인용 자동화 방법론'},
+  {date:'2026-08-21',month:'AUG',monthKo:'8월',n:8,title:'AI 전문가 초빙 특강',sub:'공공·사회서비스 분야 생성형 AI 최신 도입 사례 및 2026 트렌드 외부 강의'},
+  {date:'2026-09-04',month:'SEP',monthKo:'9월',n:9,title:'공모전 아이디어 워크숍',sub:'하이브레인넷 공모전 분석 → 팀별 아이디어 발산 → 출품 주제 선정 투표'},
+  {date:'2026-09-18',month:'SEP',monthKo:'9월',n:10,title:'AI 활용 결과물 중간 발표',sub:'지난 4개월간 각자 만든 AI 결과물 데모 및 피드백. 개선점 도출'},
+  {date:'2026-10-02',month:'OCT',monthKo:'10월',n:11,title:'공모전 출품작 제작 스프린트',sub:'팀 편성 후 공모전 출품작 초안 작성. AI 툴 풀활용 (글·이미지·분석 보조)'},
+  {date:'2026-10-16',month:'OCT',monthKo:'10월',n:12,title:'개인 AI 프로젝트 공유',sub:'개인 업무에 AI를 적용한 사례 공유 및 팁 교환. 월 1개 결과물 점검'},
+  {date:'2026-11-06',month:'NOV',monthKo:'11월',n:13,title:'공모전 출품작 최종 검토',sub:'출품 전 최종 피드백 및 보완. AI 기반 퇴고·디자인·프레젠테이션 완성'},
+  {date:'2026-11-20',month:'NOV',monthKo:'11월',n:14,title:'AI 보안·윤리·법규 이해',sub:'공공기관 AI 활용 시 주의사항, 개인정보·저작권·KISA 가이드라인 스터디'},
+  {date:'2026-12-04',month:'DEC',monthKo:'12월',n:15,title:'연간 성과 정리 & 발표',sub:'2026년 동아리 활동 결과물 전체 정리. 공모전 결과 공유 및 2027 계획 논의'},
+  {date:'2026-12-18',month:'DEC',monthKo:'12월',n:16,title:'종강 파티 & 2027 계획',sub:'한 해 마무리 회식 겸 네트워킹. 내년 주제·일정·리더십 논의'},
+];
+const DAYS=['일','월','화','수','목','금','토'];
+const MONTHS={MAY:'5월',JUN:'6월',JUL:'7월',AUG:'8월',SEP:'9월',OCT:'10월',NOV:'11월',DEC:'12월'};
+let curFilter='all';
+
+function renderProgress(){
+  const today=new Date();
+  const done=SESSIONS.filter(s=>new Date(s.date)<today).length;
+  const pct=Math.round(done/SESSIONS.length*100);
+  document.getElementById('progressWrap').innerHTML=`
+    <div class="pb-info"><span>${done}/${SESSIONS.length} 회차 완료</span><span>${pct}%</span></div>
+    <div class="pb-track"><div class="pb-fill" style="width:${pct}%"></div></div>`;
+}
+
+function renderTimeline(){
+  const today=new Date();
+  const groups={};
+  SESSIONS.filter(s=>curFilter==='all'||s.month===curFilter).forEach(s=>{
+    if(!groups[s.month])groups[s.month]=[];
+    groups[s.month].push(s);
+  });
+  const el=document.getElementById('timeline');
+  el.innerHTML=Object.keys(groups).map(m=>{
+    const cards=groups[m].map(s=>{
+      const d=new Date(s.date);
+      const isPast=d<today&&d.toDateString()!==today.toDateString();
+      const isToday=d.toDateString()===today.toDateString();
+      const dateStr=`${d.getMonth()+1}월 ${d.getDate()}일 (${DAYS[d.getDay()]})`;
+      return `<div class="sc-card ${isPast?'past':''} ${isToday?'today':''}">
+        ${isToday?'<div class="today-badge">TODAY</div>':''}
+        <div class="sc-top">
+          <span class="sc-session">${s.n}회차</span>
+          <span class="sc-date">${dateStr}</span>
+        </div>
+        <div class="sc-title">${esc(s.title)}</div>
+        <div class="sc-sub">${esc(s.sub)}</div>
+      </div>`;
+    }).join('');
+    return `<div class="month-group">
+      <div class="mg-hd">
+        <span class="mg-month">${m}</span>
+        <span style="font-size:13px;color:var(--muted);font-family:var(--mono)">${MONTHS[m]}</span>
+        <div class="mg-bar"></div>
+      </div>
+      <div class="sessions">${cards}</div>
+    </div>`;
+  }).join('');
+}
+
+function filterMonth(m,btn){
+  curFilter=m;
+  document.querySelectorAll('.mf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTimeline();
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+renderProgress();renderTimeline();
+</script>
+</body>
+</html>

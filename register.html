@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>회원가입 — 인사동 AI 학습동아리</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;600&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/shared.css"/>
+  <style>
+  .main{margin-left:var(--sb);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:60px 40px}
+  .reg-wrap{width:100%;max-width:540px}
+  .reg-badge{font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:var(--accent);text-transform:uppercase;display:block;margin-bottom:12px}
+  .reg-h1{font-size:30px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+  .reg-sub{font-size:14px;color:var(--muted);margin-bottom:36px;line-height:1.6}
+  .reg-form{background:var(--panel);border:1px solid var(--border);border-radius:var(--r2);padding:36px;display:flex;flex-direction:column;gap:14px}
+  .inp-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .inp-group{display:flex;flex-direction:column;gap:6px}
+  .inp-label{font-size:12px;color:var(--muted);font-weight:500}
+  .inp-hint{font-size:11px;color:var(--dim);margin-top:2px}
+  .divider{height:1px;background:var(--border);margin:4px 0}
+  .reg-notice{background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.2);border-radius:var(--r);padding:14px 16px;font-size:12px;color:var(--muted);line-height:1.7}
+  .reg-notice strong{color:var(--accent);display:block;margin-bottom:4px}
+  .already{text-align:center;font-size:13px;color:var(--muted);padding-top:4px}
+  .already a{color:var(--accent)}
+  /* strength bar */
+  .pw-strength{height:4px;border-radius:2px;background:var(--bg3);overflow:hidden;margin-top:6px}
+  .pw-fill{height:100%;border-radius:2px;transition:width .3s,background .3s;width:0}
+  .pw-label{font-size:10px;color:var(--dim);margin-top:3px}
+  @media(max-width:768px){
+    .main{padding:70px 16px 40px;align-items:flex-start}
+    .inp-row{grid-template-columns:1fr}
+    .reg-form{padding:24px 20px}
+  }
+  </style>
+</head>
+<body>
+<script src="../js/sidebar.js"></script>
+
+<main class="main">
+  <div class="reg-wrap">
+    <span class="reg-badge">REGISTER</span>
+    <h1 class="reg-h1">인사동 AI 학습동아리<br>참여 신청</h1>
+    <p class="reg-sub">가입 신청 후 관리자 승인이 완료되면<br>모든 기능을 이용하실 수 있습니다.</p>
+
+    <div class="reg-form">
+      <!-- 계정 정보 -->
+      <div class="inp-row">
+        <div class="inp-group">
+          <label class="inp-label">아이디 <span style="color:var(--red)">*</span></label>
+          <input id="rId"    class="inp" placeholder="영문 소문자·숫자 4~20자"/>
+          <span class="inp-hint">로그인에 사용됩니다</span>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">이름 <span style="color:var(--red)">*</span></label>
+          <input id="rName"  class="inp" placeholder="실명 입력"/>
+        </div>
+      </div>
+
+      <div class="inp-row">
+        <div class="inp-group">
+          <label class="inp-label">부서명 <span style="color:var(--red)">*</span></label>
+          <input id="rDept"  class="inp" placeholder="예: 정보화팀"/>
+        </div>
+        <div class="inp-group">
+          <label class="inp-label">직위 <span style="color:var(--red)">*</span></label>
+          <select id="rRole" class="inp" style="appearance:none">
+            <option value="">선택하세요</option>
+            <option>주임</option><option>대리</option><option>과장</option>
+            <option>부장</option><option>차장</option><option>팀장</option><option>기타</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="inp-group">
+        <label class="inp-label">이메일 <span style="color:var(--red)">*</span></label>
+        <input id="rEmail" class="inp" type="email" placeholder="업무용 이메일 주소"/>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="inp-group">
+        <label class="inp-label">비밀번호 <span style="color:var(--red)">*</span></label>
+        <input id="rPw"  class="inp" type="password" placeholder="8자 이상, 영문+숫자+특수문자 권장" oninput="checkStrength(this.value)"/>
+        <div class="pw-strength"><div class="pw-fill" id="pwFill"></div></div>
+        <span class="pw-label" id="pwLabel">비밀번호를 입력하세요</span>
+      </div>
+      <div class="inp-group">
+        <label class="inp-label">비밀번호 확인 <span style="color:var(--red)">*</span></label>
+        <input id="rPw2" class="inp" type="password" placeholder="동일한 비밀번호 입력"/>
+      </div>
+
+      <div class="form-err" id="regErr"></div>
+
+      <div class="reg-notice">
+        <strong>📋 가입 안내</strong>
+        신청 후 관리자(정보화팀)가 검토하여 승인합니다. 승인 완료 시 입력하신 이메일로 알림이 발송됩니다. 동아리 구성원이 아닌 경우에도 가입 신청이 가능하나, 관리자 판단에 따라 거부될 수 있습니다.
+      </div>
+
+      <button class="btn btn-primary btn-full btn-lg" onclick="doRegister()">가입 신청하기 →</button>
+
+      <p class="already">이미 계정이 있으신가요? <a href="#" onclick="event.preventDefault();openModal('loginModal')">로그인</a></p>
+    </div>
+  </div>
+</main>
+
+<script src="../js/shared.js"></script>
+<script>
+function checkStrength(pw){
+  const fill=document.getElementById('pwFill');
+  const lbl=document.getElementById('pwLabel');
+  if(!pw){fill.style.width='0';fill.style.background='';lbl.textContent='비밀번호를 입력하세요';return}
+  let s=0;
+  if(pw.length>=8)s++;if(pw.length>=12)s++;
+  if(/[A-Z]/.test(pw)||/[a-z]/.test(pw))s++;
+  if(/\d/.test(pw))s++;
+  if(/[^A-Za-z0-9]/.test(pw))s++;
+  const pct=Math.min(s*20,100);
+  fill.style.width=pct+'%';
+  const grades=[['',''],['20%','#f87171'],['40%','#fb923c'],['60%','#fbbf24'],['80%','#34d399'],['100%','#38bdf8']];
+  const g=grades[s]||grades[1];
+  fill.style.background=g[1];
+  lbl.textContent=['','매우 약함','약함','보통','강함','매우 강함'][s]||'';
+  lbl.style.color=g[1];
+}
+
+function doRegister(){
+  const id=document.getElementById('rId').value.trim();
+  const name=document.getElementById('rName').value.trim();
+  const dept=document.getElementById('rDept').value.trim();
+  const role=document.getElementById('rRole').value;
+  const email=document.getElementById('rEmail').value.trim();
+  const pw=document.getElementById('rPw').value;
+  const pw2=document.getElementById('rPw2').value;
+  const err=document.getElementById('regErr');
+
+  if(!id||!name||!dept||!role||!email||!pw){err.textContent='모든 항목을 입력해 주세요.';return}
+  if(!/^[a-z0-9]{4,20}$/.test(id)){err.textContent='아이디는 영문 소문자·숫자 4~20자입니다.';return}
+  if(pw.length<8){err.textContent='비밀번호는 8자 이상이어야 합니다.';return}
+  if(pw!==pw2){err.textContent='비밀번호가 일치하지 않습니다.';return}
+  if(DB.findUser(id)){err.textContent='이미 사용 중인 아이디입니다.';return}
+
+  DB.addUser({id,name,dept,role,email,pw:DB.hash(pw),status:'pending',isAdmin:false,joinedAt:new Date().toISOString()});
+  err.textContent='';
+
+  // 성공 화면
+  document.querySelector('.reg-form').innerHTML=`
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:48px;margin-bottom:20px">✅</div>
+      <h3 style="font-size:20px;font-weight:700;margin-bottom:12px">가입 신청 완료!</h3>
+      <p style="color:var(--muted);font-size:14px;line-height:1.8;margin-bottom:24px">
+        관리자 승인 후 로그인이 가능합니다.<br>승인 결과는 입력하신 이메일로 알려드립니다.
+      </p>
+      <a href="../index.html" class="btn btn-accent btn-lg">홈으로 돌아가기</a>
+    </div>`;
+}
+</script>
+</body>
+</html>
