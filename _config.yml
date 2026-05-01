@@ -1,0 +1,64 @@
+# 기본 정보
+title: My GitHub Blog
+description: >-
+  Welcome to my GitHub Pages blog.
+  I write about tech, food, and life.
+url: "https://hds826-byte.github.io"
+baseurl: "/testRepository"
+
+# 작성자
+author:
+  name: hds826-byte
+  email: hds826@gmail.com
+
+# 테마 (GitHub Pages 기본 지원)
+theme: minima
+
+# 플러그인 (GitHub Pages 지원되는 것만)
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# SEO 설정
+lang: ko
+timezone: Asia/Seoul
+
+# Markdown 설정
+markdown: kramdown
+highlighter: rouge
+
+# Pagination (주의: GitHub Pages는 paginate 기본 지원 안됨 → jekyll-paginate 필요)
+paginate: 5
+paginate_path: "/page:num/"
+
+# permalink 구조
+permalink: /:categories/:year/:month/:day/:title/
+
+# 기본값 설정
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Your Name"
+
+# 제외 파일
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+
+# 소셜
+social_links:
+  github: yourusername
+  instagram: yourinsta
+
+# 댓글 (Disqus 쓰는 경우)
+disqus:
+  shortname: your-disqus-id
+
+# Google Analytics (선택)
+google_analytics: G-XXXXXXXXXX
