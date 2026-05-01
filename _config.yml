@@ -4,7 +4,7 @@ description: >-
   Welcome to my GitHub Pages blog.
   I write about tech, food, and life.
 url: "https://hds826-byte.github.io"
-baseurl: "/testRepository"
+baseurl: ""
 
 # 작성자
 author:
