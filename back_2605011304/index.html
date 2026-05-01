@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>인사동 — AI 학습동아리</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;600&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     SIDEBAR NAV
+══════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sb-badge">IN</div>
+    <div>
+      <div class="sb-name">인사동</div>
+      <div class="sb-sub">AI 학습동아리</div>
+    </div>
+  </div>
+  <nav class="sb-nav">
+    <a href="#hero"     class="sb-link active" data-section="hero">     <span class="sb-icon">◈</span> 홈</a>
+    <a href="#schedule" class="sb-link"         data-section="schedule"> <span class="sb-icon">◷</span> 운영 일정</a>
+    <a href="#members"  class="sb-link"         data-section="members">  <span class="sb-icon">◉</span> 구성원</a>
+    <a href="#goals"    class="sb-link"         data-section="goals">    <span class="sb-icon">◆</span> 목표</a>
+    <a href="#contest"  class="sb-link"         data-section="contest">  <span class="sb-icon">◎</span> 공모전</a>
+    <a href="#news"     class="sb-link"         data-section="news">     <span class="sb-icon">◐</span> AI 뉴스</a>
+    <a href="#board"    class="sb-link"         data-section="board">    <span class="sb-icon">◧</span> 게시판</a>
+  </nav>
+  <div class="sb-bottom">
+    <div id="sbUserArea">
+      <button class="sb-auth-btn" onclick="openModal('loginModal')">로그인</button>
+      <button class="sb-auth-btn outline" onclick="openModal('registerModal')">회원가입</button>
+    </div>
+  </div>
+</aside>
+
+<!-- 모바일 헤더 -->
+<header class="mobile-header">
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()">☰</button>
+  <span class="mobile-title">인사동 AI동아리</span>
+  <button class="sb-auth-btn small" onclick="openModal('loginModal')">로그인</button>
+</header>
+
+<!-- ══════════════════════════════════════════
+     MAIN CONTENT
+══════════════════════════════════════════ -->
+<main class="main-content">
+
+  <!-- HERO -->
+  <section id="hero" class="section hero-section">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow">
+        <span class="pill-tag">2026 임직원 학습동아리</span>
+        <span class="pill-live">● ACTIVE</span>
+      </div>
+      <h1 class="hero-h1">
+        <span class="h1-line1">INSADONG</span>
+        <span class="h1-line2">AI <em>학습동아리</em></span>
+      </h1>
+      <p class="hero-desc">인공지능(AI)을 활용하여 사회서비스의 문제점을 분석하고<br>실질적인 개선 아이디어와 공모전 수상작을 함께 만들어 갑니다.</p>
+      <div class="hero-kpi">
+        <div class="kpi-item"><div class="kpi-n">5명</div><div class="kpi-l">동아리원</div></div>
+        <div class="kpi-div"></div>
+        <div class="kpi-item"><div class="kpi-n">16회</div><div class="kpi-l">정기 모임</div></div>
+        <div class="kpi-div"></div>
+        <div class="kpi-item"><div class="kpi-n">월 1+</div><div class="kpi-l">AI 결과물</div></div>
+        <div class="kpi-div"></div>
+        <div class="kpi-item"><div class="kpi-n">공모전</div><div class="kpi-l">수상 목표</div></div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">SCROLL ↓</div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section id="schedule" class="section">
+    <div class="sec-head">
+      <span class="sec-label">SCHEDULE</span>
+      <h2 class="sec-title">2026 세부 운영 일정</h2>
+      <p class="sec-desc">5월~12월 격주 모임 | 매회 생성형 AI 실전 활용 주제</p>
+    </div>
+    <div class="schedule-grid" id="scheduleGrid"></div>
+  </section>
+
+  <!-- MEMBERS -->
+  <section id="members" class="section section-dark">
+    <div class="sec-head">
+      <span class="sec-label">MEMBERS</span>
+      <h2 class="sec-title">동아리 구성원</h2>
+    </div>
+    <div class="members-row">
+      <div class="member-card leader-card">
+        <div class="mc-avatar" style="background:linear-gradient(135deg,#38bdf8,#818cf8)">지</div>
+        <div class="mc-role leader-role">리더</div>
+        <div class="mc-name">지현석</div>
+        <div class="mc-dept">정보화팀 · 과장</div>
+      </div>
+      <div class="member-card">
+        <div class="mc-avatar" style="background:linear-gradient(135deg,#818cf8,#c084fc)">최</div>
+        <div class="mc-role mgr-role">매니저</div>
+        <div class="mc-name">최효진</div>
+        <div class="mc-dept">시설평가부 · 대리</div>
+      </div>
+      <div class="member-card">
+        <div class="mc-avatar" style="background:linear-gradient(135deg,#34d399,#38bdf8)">조</div>
+        <div class="mc-role mem-role">회원</div>
+        <div class="mc-name">조유리</div>
+        <div class="mc-dept">지역협력부 · 대리</div>
+      </div>
+      <div class="member-card">
+        <div class="mc-avatar" style="background:linear-gradient(135deg,#fb923c,#f43f5e)">유</div>
+        <div class="mc-role mem-role">회원</div>
+        <div class="mc-name">유병찬</div>
+        <div class="mc-dept">혁신기획부 · 주임</div>
+      </div>
+      <div class="member-card">
+        <div class="mc-avatar" style="background:linear-gradient(135deg,#fbbf24,#fb923c)">이</div>
+        <div class="mc-role mem-role">회원</div>
+        <div class="mc-name">이찬영</div>
+        <div class="mc-dept">시설평가부 · 부장</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOALS -->
+  <section id="goals" class="section">
+    <div class="sec-head">
+      <span class="sec-label">GOALS</span>
+      <h2 class="sec-title">동아리 목표</h2>
+    </div>
+    <div class="goals-duo">
+      <div class="goal-block blue-block">
+        <div class="gb-num">01</div>
+        <h3>월 1개 이상<br>AI 결과물 개발</h3>
+        <p>ChatGPT · Claude 등 생성형 AI를 활용해 매월 실제 사용 가능한 서비스·도구·문서를 직접 제작합니다.</p>
+        <div class="gb-tags"><span>ChatGPT</span><span>Claude</span><span>자동화</span><span>데이터분석</span></div>
+      </div>
+      <div class="goal-block amber-block">
+        <div class="gb-num">02</div>
+        <h3>중앙행정기관<br>AI 공모전 수상</h3>
+        <p>과기부 · 행안부 등 중앙부처 주관 AI 활용 공모전에 출품하여 수상을 목표로 합니다.</p>
+        <div class="gb-tags"><span>과학기술정보통신부</span><span>행정안전부</span><span>NIA</span></div>
+      </div>
+    </div>
+    <div class="budget-panel">
+      <div class="bp-title"><span class="sec-label">BUDGET</span> 운영 예산 계획</div>
+      <div class="bp-items">
+        <div class="bp-row"><span>AI 전문가 초빙 강의</span><span class="bp-amt">400,000원</span></div>
+        <div class="bp-row"><span>교재·자료 제작 및 인쇄비</span><span class="bp-amt">100,000원</span></div>
+        <div class="bp-row"><span>다과 및 회의 지원</span><span class="bp-amt">150,000원</span></div>
+        <div class="bp-row"><span>유료 AI 툴 구독료</span><span class="bp-amt">300,000원</span></div>
+        <div class="bp-row"><span>기타 운영비</span><span class="bp-amt">50,000원</span></div>
+        <div class="bp-row total-row"><span>합 계</span><span class="bp-amt">1,000,000원</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTEST -->
+  <section id="contest" class="section section-dark">
+    <div class="sec-head">
+      <span class="sec-label">CONTEST</span>
+      <h2 class="sec-title">AI 활용 공모전</h2>
+      <p class="sec-desc">하이브레인넷 공모전 게시판 연동 | 실시간 업데이트</p>
+    </div>
+    <div class="contest-toolbar">
+      <button class="c-tab active" onclick="filterContest('all',this)">전체</button>
+      <button class="c-tab" onclick="filterContest('ai',this)">AI·데이터</button>
+      <button class="c-tab" onclick="filterContest('gov',this)">공공·행정</button>
+      <button class="c-tab" onclick="filterContest('social',this)">사회서비스</button>
+      <button class="btn-refresh" onclick="loadContests()">↻ 새로고침</button>
+    </div>
+    <div id="contestList" class="contest-list">
+      <div class="loading-box">공모전 정보를 불러오는 중...</div>
+    </div>
+    <div class="contest-link-banner">
+      <span>더 많은 공모전 보기</span>
+      <a href="https://www.hirebrainet.com/contest/list.do" target="_blank" rel="noopener" class="ext-link-btn">하이브레인넷 공모전 →</a>
+    </div>
+  </section>
+
+  <!-- AI NEWS -->
+  <section id="news" class="section">
+    <div class="sec-head">
+      <span class="sec-label">AI NEWS</span>
+      <h2 class="sec-title">오늘의 AI 뉴스</h2>
+      <p class="sec-desc">매일 오전 7시 선별 업데이트 | 생성형 AI · 공공 디지털 분야</p>
+    </div>
+    <div class="news-header-bar">
+      <div id="newsUpdateTime" class="news-ts">—</div>
+      <button class="btn-refresh" onclick="loadNews()">↻ 새로고침</button>
+    </div>
+    <div id="newsList" class="news-grid">
+      <div class="loading-box">뉴스를 불러오는 중...</div>
+    </div>
+  </section>
+
+  <!-- BOARD -->
+  <section id="board" class="section section-dark">
+    <div class="sec-head">
+      <span class="sec-label">BOARD</span>
+      <h2 class="sec-title">자유 게시판</h2>
+      <p class="sec-desc">아이디어 · 공모전 제안 · AI 툴 추천 · 모임 후기 무엇이든 OK</p>
+    </div>
+
+    <!-- 글쓰기 폼 -->
+    <div class="board-write" id="boardWrite">
+      <div id="loginRequired" class="login-required-msg" style="display:none">
+        <span>✦ 게시글 작성은 로그인 후 이용 가능합니다.</span>
+        <button onclick="openModal('loginModal')">로그인하기</button>
+      </div>
+      <div id="writeForm">
+        <div class="write-row">
+          <select id="postCat" class="w-select">
+            <option value="일반">💬 일반</option>
+            <option value="아이디어">💡 아이디어</option>
+            <option value="공모전">🏆 공모전</option>
+            <option value="AI툴">🤖 AI 툴</option>
+            <option value="모임">📅 모임</option>
+          </select>
+          <input type="text" id="postTitle" placeholder="제목을 입력하세요" class="w-input"/>
+        </div>
+        <textarea id="postBody" placeholder="내용을 자유롭게 작성하세요..." rows="4" class="w-textarea"></textarea>
+        <div class="write-bottom">
+          <label class="file-label">
+            <input type="file" id="postFile" multiple accept=".pdf,.docx,.xlsx,.pptx,.jpg,.png,.zip" style="display:none" onchange="updateFileList()"/>
+            <span class="file-btn">📎 파일 첨부</span>
+          </label>
+          <div id="fileList" class="file-list"></div>
+          <button class="btn-post" onclick="submitPost()">게시하기 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 게시글 목록 -->
+    <div class="board-toolbar">
+      <div class="board-cats">
+        <button class="bc-btn active" onclick="filterBoard('전체',this)">전체</button>
+        <button class="bc-btn" onclick="filterBoard('일반',this)">💬 일반</button>
+        <button class="bc-btn" onclick="filterBoard('아이디어',this)">💡 아이디어</button>
+        <button class="bc-btn" onclick="filterBoard('공모전',this)">🏆 공모전</button>
+        <button class="bc-btn" onclick="filterBoard('AI툴',this)">🤖 AI 툴</button>
+        <button class="bc-btn" onclick="filterBoard('모임',this)">📅 모임</button>
+      </div>
+      <input type="text" id="boardSearch" placeholder="검색..." class="board-search" oninput="searchBoard(this.value)"/>
+    </div>
+    <div id="postList" class="post-list"></div>
+    <div id="boardPaging" class="board-paging"></div>
+  </section>
+
+</main><!-- /main-content -->
+
+<!-- ══════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════ -->
+
+<!-- 로그인 -->
+<div id="loginModal" class="modal-overlay" onclick="closeModalOutside(event,'loginModal')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>로그인</h3>
+      <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="text"     id="loginId"  placeholder="아이디" class="m-input"/>
+      <input type="password" id="loginPw"  placeholder="비밀번호" class="m-input"/>
+      <div id="loginErr" class="form-err"></div>
+      <button class="btn-primary full" onclick="doLogin()">로그인</button>
+      <p class="modal-footer-text">계정이 없으신가요? <a href="#" onclick="switchModal('loginModal','registerModal')">회원가입</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- 회원가입 -->
+<div id="registerModal" class="modal-overlay" onclick="closeModalOutside(event,'registerModal')">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>회원가입</h3>
+      <button class="modal-close" onclick="closeModal('registerModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="text"     id="regId"    placeholder="아이디 (영문·숫자 4~20자)" class="m-input"/>
+      <input type="text"     id="regName"  placeholder="이름" class="m-input"/>
+      <input type="text"     id="regDept"  placeholder="부서명" class="m-input"/>
+      <select id="regRole" class="m-input">
+        <option value="">직위 선택</option>
+        <option>주임</option><option>대리</option><option>과장</option>
+        <option>부장</option><option>차장</option><option>팀장</option><option>기타</option>
+      </select>
+      <input type="email"    id="regEmail" placeholder="이메일" class="m-input"/>
+      <input type="password" id="regPw"    placeholder="비밀번호 (8자 이상)" class="m-input"/>
+      <input type="password" id="regPw2"   placeholder="비밀번호 확인" class="m-input"/>
+      <div id="regErr" class="form-err"></div>
+      <button class="btn-primary full" onclick="doRegister()">가입 신청</button>
+      <p class="modal-footer-text small">관리자 승인 후 로그인이 가능합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 관리자 패널 -->
+<div id="adminModal" class="modal-overlay" onclick="closeModalOutside(event,'adminModal')">
+  <div class="modal-box wide">
+    <div class="modal-header">
+      <h3>⚙ 관리자 패널</h3>
+      <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="admin-tabs">
+        <button class="adm-tab active" onclick="switchAdminTab('pending',this)">가입 승인 대기</button>
+        <button class="adm-tab" onclick="switchAdminTab('members',this)">회원 관리</button>
+      </div>
+      <div id="adminPending" class="adm-panel"></div>
+      <div id="adminMembers" class="adm-panel" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 게시글 상세 -->
+<div id="postModal" class="modal-overlay" onclick="closeModalOutside(event,'postModal')">
+  <div class="modal-box wide">
+    <div class="modal-header">
+      <h3 id="postModalTitle"></h3>
+      <button class="modal-close" onclick="closeModal('postModal')">✕</button>
+    </div>
+    <div id="postModalBody" class="modal-body post-detail"></div>
+  </div>
+</div>
+
+<!-- 토스트 -->
+<div id="toast" class="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/board.js"></script>
+<script src="js/schedule.js"></script>
+<script src="js/news.js"></script>
+<script src="js/contest.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
